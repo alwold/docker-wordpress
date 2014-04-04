@@ -9,15 +9,15 @@ ADD ./start.sh /start.sh
 ADD ./foreground.sh /etc/apache2/foreground.sh
 ADD ./supervisord.conf /etc/supervisord.conf
 RUN echo %sudo	ALL=NOPASSWD: ALL >> /etc/sudoers
-RUN rm -rf /var/www/
+#RUN rm -rf /var/www/
 ADD http://wordpress.org/latest.tar.gz /wordpress.tar.gz
 RUN tar xvzf /wordpress.tar.gz 
-RUN mv /wordpress /var/www/
+RUN mv /wordpress /var/www/blog
 RUN chown -R www-data:www-data /var/www/
 RUN chmod 755 /start.sh
 RUN chmod 755 /etc/apache2/foreground.sh
 RUN mkdir /var/log/supervisor/
 RUN mkdir /var/run/sshd
-EXPOSE 80 8080
+EXPOSE 80
 EXPOSE 22
 CMD ["/bin/bash", "/start.sh"]
