@@ -1,19 +1,14 @@
-FROM ubuntu:latest
+FROM ubuntu:13.10
 MAINTAINER John Fink <john.fink@gmail.com>
 RUN apt-get update # Mon Jan 27 11:35:22 EST 2014
-RUN apt-mark hold initscripts
 RUN apt-get -y upgrade
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install mysql-client mysql-server apache2 libapache2-mod-php5 pwgen python-setuptools vim-tiny php5-mysql openssh-server sudo php5-ldap
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install mysql-client mysql-server php5-fpm pwgen python-setuptools vim-tiny php5-mysql openssh-server sudo
 RUN easy_install supervisor
 ADD ./start.sh /start.sh
 ADD ./foreground.sh /etc/apache2/foreground.sh
 ADD ./supervisord.conf /etc/supervisord.conf
 RUN echo %sudo	ALL=NOPASSWD: ALL >> /etc/sudoers
-#RUN rm -rf /var/www/
-ADD http://wordpress.org/latest.tar.gz /wordpress.tar.gz
-RUN tar xvzf /wordpress.tar.gz 
-RUN mv /wordpress /var/www/blog
-RUN chown -R www-data:www-data /var/www/
+ADD ./wp-config-sample.php /tmp/wp-config-sample.php
 RUN chmod 755 /start.sh
 RUN chmod 755 /etc/apache2/foreground.sh
 RUN mkdir /var/log/supervisor/

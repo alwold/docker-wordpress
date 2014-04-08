@@ -33,14 +33,11 @@ s/password_here/$WORDPRESS_PASSWORD/
 /'AUTH_SALT'/s/put your unique phrase here/`pwgen -c -n -1 65`/
 /'SECURE_AUTH_SALT'/s/put your unique phrase here/`pwgen -c -n -1 65`/
 /'LOGGED_IN_SALT'/s/put your unique phrase here/`pwgen -c -n -1 65`/
-/'NONCE_SALT'/s/put your unique phrase here/`pwgen -c -n -1 65`/" /var/www/blog/wp-config-sample.php > /var/www/blog/wp-config.php
+/'NONCE_SALT'/s/put your unique phrase here/`pwgen -c -n -1 65`/" /tmp/wp-config-sample.php > /etc/wp-config.php
 
-mv /etc/php5/apache2/php.ini /etc/php5/apache2/php.ini.orig
-sed "s/upload_max_filesize = 2M/upload_max_filesize = 20M/" /etc/php5/apache2/php.ini.orig > /etc/php5/apache2/php.ini
+sed -e "s/^listen = .*$/listen = 9000/" /etc/php5/fpm/pool.d/www.conf > /etc/php5/fpm/pool.d/www.conf.new
+mv /etc/php5/fpm/pool.d/www.conf.new /etc/php5/fpm/pool.d/www.conf
 
- 
-
-chown www-data:www-data /var/www/blog/wp-config.php
 mysqladmin -u root password $MYSQL_PASSWORD 
 mysql -uroot -p$MYSQL_PASSWORD -e "CREATE DATABASE wordpress; GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'localhost' IDENTIFIED BY '$WORDPRESS_PASSWORD'; FLUSH PRIVILEGES;"
 killall mysqld
