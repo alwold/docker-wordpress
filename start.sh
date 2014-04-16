@@ -38,6 +38,9 @@ s/password_here/$WORDPRESS_PASSWORD/
 sed -e "s/^listen = .*$/listen = 9000/" /etc/php5/fpm/pool.d/www.conf > /etc/php5/fpm/pool.d/www.conf.new
 mv /etc/php5/fpm/pool.d/www.conf.new /etc/php5/fpm/pool.d/www.conf
 
+# fix this: http://gaijin-nippon.blogspot.com/2013/07/audit-on-lxc-host.html
+sed -i "s/^session\s\s*required\s\s*pam_loginuid\.so/#&/" /etc/pam.d/sshd
+
 mysqladmin -u root password $MYSQL_PASSWORD 
 mysql -uroot -p$MYSQL_PASSWORD -e "CREATE DATABASE wordpress; GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'localhost' IDENTIFIED BY '$WORDPRESS_PASSWORD'; FLUSH PRIVILEGES;"
 killall mysqld
