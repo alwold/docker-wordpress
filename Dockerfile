@@ -13,6 +13,8 @@ RUN chmod 755 /start.sh
 RUN chmod 755 /etc/apache2/foreground.sh
 RUN mkdir /var/log/supervisor/
 RUN mkdir /var/run/sshd
+RUN mkdir -p /var/wordpress/uploads
+RUN chown www-data:www-data /var/wordpress/uploads
 EXPOSE 80
 EXPOSE 22
 CMD ["/bin/bash", "/start.sh"]
